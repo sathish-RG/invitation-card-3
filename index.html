@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!-- Static tags below are what WhatsApp / social previews read (they don't run JS) — edit them too. -->
+  <title>Priya &amp; Arjun · Wedding Invitation</title>
+  <meta name="description" content="With the blessings of our families, Priya and Arjun invite you to celebrate their wedding on 12 February 2027 in Chennai.">
+  <meta name="theme-color" content="#0A1A3F">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Priya &amp; Arjun are getting married">
+  <meta property="og:description" content="Muhurtham · Friday, 12 February 2027 · Chennai. Tap to open the invitation.">
+  <!-- <meta property="og:image" content="https://your-domain.com/images/preview.jpg"> -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Great+Vibes&family=Noto+Serif+Tamil:wght@400;500;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       SVG DEFINITIONS
+       Ornament symbols (mandala, feather, lotus, bell, lamp…) are
+       generated into #svgDefs by script.js → buildOrnaments().
+       ============================================================ -->
+  <svg class="svg-defs" aria-hidden="true" focusable="false">
+    <defs id="svgDefs">
+      <!-- Peacock-feather "eye" shape used to clip the couple photos -->
+      <clipPath id="featherClip" clipPathUnits="objectBoundingBox">
+        <path d="M0.5,0 C0.78,0.12 1,0.38 1,0.62 C1,0.86 0.78,1 0.5,1 C0.22,1 0,0.86 0,0.62 C0,0.38 0.22,0.12 0.5,0 Z"/>
+      </clipPath>
+    </defs>
+  </svg>
+
+  <!-- ============================================================
+       INTRO — starry sky + mandala, then the palace gate opens
+       ============================================================ -->
+  <div class="intro" id="intro">
+    <!-- Palace gate (sits underneath the sky; revealed on open) -->
+    <div class="gate" aria-hidden="true">
+      <div class="gate-glow"></div>
+      <div class="gate-door gate-door--left">
+        <div class="door-frame">
+          <div class="door-arch"><svg class="door-feather" viewBox="0 0 120 420"><use href="#sym-feather"/></svg></div>
+          <div class="door-studs"></div>
+          <div class="door-panel"><svg class="door-lotus" viewBox="0 0 100 62"><use href="#sym-lotus"/></svg></div>
+        </div>
+        <span class="door-handle"></span>
+      </div>
+      <div class="gate-door gate-door--right">
+        <div class="door-frame">
+          <div class="door-arch"><svg class="door-feather" viewBox="0 0 120 420"><use href="#sym-feather"/></svg></div>
+          <div class="door-studs"></div>
+          <div class="door-panel"><svg class="door-lotus" viewBox="0 0 100 62"><use href="#sym-lotus"/></svg></div>
+        </div>
+        <span class="door-handle"></span>
+      </div>
+      <div class="gate-lintel"></div>
+    </div>
+
+    <!-- Starry sky cover -->
+    <div class="intro-sky">
+      <canvas class="particles" data-stars="110" data-sparkles="22" data-petals="0" aria-hidden="true"></canvas>
+      <div class="moon intro-moon" aria-hidden="true"></div>
+
+      <div class="intro-content">
+        <p class="intro-blessing" data-bind="blessing"></p>
+
+        <div class="intro-mandala" aria-hidden="true">
+          <div class="mandala-glow"></div>
+          <div class="mandala-half mandala-half--left"><svg class="mandala-spin" viewBox="0 0 200 200"><use href="#sym-mandala"/></svg></div>
+          <div class="mandala-half mandala-half--right"><svg class="mandala-spin" viewBox="0 0 200 200"><use href="#sym-mandala"/></svg></div>
+          <div class="mandala-initials"><span data-bind="bride.initial"></span><i>&amp;</i><span data-bind="groom.initial"></span></div>
+        </div>
+
+        <p class="intro-names"><span data-bind="bride.name"></span> &amp; <span data-bind="groom.name"></span></p>
+        <button class="intro-btn" id="openBtn" type="button">
+          <span>Tap to Open Invitation</span>
+        </button>
+        <p class="intro-hint">Best enjoyed with sound on</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-screen canvas for the opening sparkle / petal burst -->
+  <canvas class="burst" id="burst" aria-hidden="true"></canvas>
+
+  <!-- ============================================================
+       STICKY NAV + SCROLL PROGRESS
+       ============================================================ -->
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <header class="nav" id="nav">
+    <a class="nav-brand" href="#home" aria-label="Back to top">
+      <span data-bind="bride.initial"></span><i>&amp;</i><span data-bind="groom.initial"></span>
+    </a>
+    <nav class="nav-links" id="navLinks" aria-label="Sections">
+      <a href="#home" class="nav-link">Home</a>
+      <a href="#invitation" class="nav-link">Invitation</a>
+      <a href="#couple" class="nav-link">Couple</a>
+      <a href="#story" class="nav-link">Story</a>
+      <a href="#events" class="nav-link">Events</a>
+      <a href="#countdown" class="nav-link">Countdown</a>
+      <a href="#gallery" class="nav-link">Gallery</a>
+      <a href="#venue" class="nav-link">Venue</a>
+      <a href="#rsvp" class="nav-link">RSVP</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main id="main">
+
+    <!-- ============================================================
+         1. HERO
+         ============================================================ -->
+    <section class="section hero dark" id="home">
+      <canvas class="particles" data-stars="80" data-sparkles="18" data-petals="16" aria-hidden="true"></canvas>
+
+      <div class="hero-mandala" data-parallax="-0.25" aria-hidden="true">
+        <svg viewBox="0 0 200 200"><use href="#sym-mandala"/></svg>
+      </div>
+      <div class="moon hero-moon" data-parallax="-0.4" aria-hidden="true"></div>
+
+      <!-- Swinging temple bells -->
+      <div class="bells" aria-hidden="true">
+        <div class="bell bell--1"><svg viewBox="0 0 40 60"><use href="#sym-bell"/></svg></div>
+        <div class="bell bell--2"><svg viewBox="0 0 40 60"><use href="#sym-bell"/></svg></div>
+        <div class="bell bell--3"><svg viewBox="0 0 40 60"><use href="#sym-bell"/></svg></div>
+        <div class="bell bell--4"><svg viewBox="0 0 40 60"><use href="#sym-bell"/></svg></div>
+      </div>
+
+      <!-- Peacock feathers (outer = parallax, inner = sway) -->
+      <div class="hero-feather hero-feather--left" data-parallax="0.12" aria-hidden="true">
+        <div class="feather-sway"><svg viewBox="0 0 120 420"><use href="#sym-feather"/></svg></div>
+      </div>
+      <div class="hero-feather hero-feather--right" data-parallax="0.12" aria-hidden="true">
+        <div class="feather-sway"><svg viewBox="0 0 120 420"><use href="#sym-feather"/></svg></div>
+      </div>
+
+      <div class="hero-content" data-parallax="-0.15">
+        <p class="hero-om" data-hero style="--hd:0">ॐ</p>
+        <p class="hero-blessing" data-hero style="--hd:150" data-bind="blessing"></p>
+        <p class="hero-eyebrow" data-hero style="--hd:350">We are getting married</p>
+        <h1 class="hero-names" data-hero style="--hd:500">
+          <span class="name shimmer" data-bind="bride.name"></span>
+          <span class="hero-amp">&amp;</span>
+          <span class="name shimmer name--2" data-bind="groom.name"></span>
+        </h1>
+        <div class="hero-date" data-hero style="--hd:1300">
+          <span class="hero-line"></span>
+          <time id="heroDate"></time>
+          <span class="hero-line"></span>
+        </div>
+        <p class="hero-date-ta" lang="ta" id="heroDateTa" data-hero style="--hd:1450"></p>
+        <p class="hero-city" data-hero style="--hd:1600" data-bind="venue.city"></p>
+      </div>
+
+      <a href="#invitation" class="scroll-cue" aria-label="Scroll to invitation"><span></span></a>
+    </section>
+
+    <!-- ============================================================
+         2. INVITATION MESSAGE
+         ============================================================ -->
+    <section class="section light" id="invitation">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow" data-reveal="fade-up">Shubha Vivaham</p>
+          <h2 class="section-title" data-reveal="clip">Wedding Invitation</h2>
+          <div class="divider" data-divider data-reveal="draw" data-parallax="0.05"></div>
+        </header>
+
+        <div class="lang-toggle" role="tablist" aria-label="Invitation language" data-reveal="fade-up">
+          <button type="button" role="tab" class="lang-btn is-active" data-lang="en" aria-selected="true">English</button>
+          <button type="button" role="tab" class="lang-btn" data-lang="ta" aria-selected="false" lang="ta">தமிழ்</button>
+        </div>
+
+        <div class="jharokha jharokha--light" data-reveal="zoom">
+          <svg class="jharokha-arch" data-arch viewBox="0 0 400 170" aria-hidden="true"></svg>
+          <div class="jharokha-body">
+            <div class="jharokha-inner">
+              <div class="jharokha-crest" aria-hidden="true"><svg viewBox="0 0 100 62"><use href="#sym-lotus"/></svg></div>
+              <div class="invite-lines" id="inviteLines" aria-live="polite"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         3. MEET THE COUPLE
+         ============================================================ -->
+    <section class="section dark" id="couple">
+      <canvas class="particles" data-stars="50" data-sparkles="10" data-petals="0" aria-hidden="true"></canvas>
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow" data-reveal="fade-up">Two Hearts · One Soul</p>
+          <h2 class="section-title" data-reveal="clip">Meet the Couple</h2>
+          <div class="divider" data-divider data-reveal="draw" data-parallax="0.05"></div>
+        </header>
+
+        <div class="couple-grid">
+          <article class="person-card" data-reveal="slide-left">
+            <div class="feather-frame">
+              <svg class="frame-ring" viewBox="0 0 200 200" aria-hidden="true"><use href="#sym-ring"/></svg>
+              <div class="ff ff--gold"><div class="ff ff--teal"><div class="ff ff--royal"><div class="ff ff--photo">
+                <img id="bridePhoto" alt="" width="400" height="500" loading="lazy">
+              </div></div></div></div>
+            </div>
+            <p class="person-role">The Bride</p>
+            <h3 class="person-name" data-bind="bride.name"></h3>
+            <p class="person-full" data-bind="bride.fullName"></p>
+            <p class="person-parents">Daughter of<br><span data-bind="bride.parents"></span></p>
+            <p class="person-bio" data-bind="bride.bio"></p>
+          </article>
+
+          <div class="couple-join" data-reveal="pop" aria-hidden="true">
+            <svg viewBox="0 0 100 62"><use href="#sym-lotus"/></svg>
+            <span>&amp;</span>
+          </div>
+
+          <article class="person-card" data-reveal="slide-right">
+            <div class="feather-frame">
+              <svg class="frame-ring frame-ring--rev" viewBox="0 0 200 200" aria-hidden="true"><use href="#sym-ring"/></svg>
+              <div class="ff ff--gold"><div class="ff ff--teal"><div class="ff ff--royal"><div class="ff ff--photo">
+                <img id="groomPhoto" alt="" width="400" height="500" loading="lazy">
+              </div></div></div></div>
+            </div>
+            <p class="person-role">The Groom</p>
+            <h3 class="person-name" data-bind="groom.name"></h3>
+            <p class="person-full" data-bind="groom.fullName"></p>
+            <p class="person-parents">Son of<br><span data-bind="groom.parents"></span></p>
+            <p class="person-bio" data-bind="groom.bio"></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         4. OUR STORY — timeline
+         ============================================================ -->
+    <section class="section light" id="story">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow" data-reveal="fade-up">How it all began</p>
+          <h2 class="section-title" data-reveal="clip">Our Story</h2>
+          <div class="divider" data-divider data-reveal="draw" data-parallax="0.05"></div>
+        </header>
+
+        <div class="timeline" id="timeline">
+          <div class="timeline-track" aria-hidden="true"><span class="timeline-fill" id="timelineFill"></span></div>
+          <ol class="timeline-list" id="timelineList"></ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         5. WEDDING EVENTS — 3D flip cards
+         ============================================================ -->
+    <section class="section dark" id="events">
+      <canvas class="particles" data-stars="40" data-sparkles="12" data-petals="6" aria-hidden="true"></canvas>
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow" data-reveal="fade-up">Join us for</p>
+          <h2 class="section-title" data-reveal="clip">Wedding Events</h2>
+          <div class="divider" data-divider data-reveal="draw" data-parallax="0.05"></div>
+          <p class="section-sub" data-reveal="fade-up">Tap a card to see the details</p>
+        </header>
+        <div class="events-grid" id="eventsGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         6. COUNTDOWN
+         ============================================================ -->
+    <section class="section dark countdown-section" id="countdown">
+      <canvas class="particles" data-stars="90" data-sparkles="16" data-petals="0" aria-hidden="true"></canvas>
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow" data-reveal="fade-up">Counting the auspicious moments</p>
+          <h2 class="section-title" data-reveal="clip">Until Muhurtham</h2>
+          <div class="divider" data-divider data-reveal="draw" data-parallax="0.05"></div>
+        </header>
+        <div class="countdown" id="countdownUnits" data-reveal="zoom" role="timer" aria-live="off"></div>
+        <p class="countdown-target" id="countdownTarget" data-reveal="fade-up"></p>
+        <p class="countdown-done" id="countdownDone" hidden>The auspicious moment has arrived — thank you for your blessings!</p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         7. GALLERY
+         ============================================================ -->
+    <section class="section light" id="gallery">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow" data-reveal="fade-up">Moments to cherish</p>
+          <h2 class="section-title" data-reveal="clip">Gallery</h2>
+          <div class="divider" data-divider data-reveal="draw" data-parallax="0.05"></div>
+        </header>
+        <div class="gallery" id="galleryGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         8. VENUE
+         ============================================================ -->
+    <section class="section dark" id="venue">
+      <canvas class="particles" data-stars="45" data-sparkles="10" data-petals="0" aria-hidden="true"></canvas>
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow" data-reveal="fade-up">Where we celebrate</p>
+          <h2 class="section-title" data-reveal="clip">The Venue</h2>
+          <div class="divider" data-divider data-reveal="draw" data-parallax="0.05"></div>
+        </header>
+
+        <div class="jharokha jharokha--dark venue-frame" data-reveal="zoom">
+          <svg class="jharokha-arch" data-arch viewBox="0 0 400 170" aria-hidden="true"></svg>
+          <div class="jharokha-body">
+            <div class="jharokha-inner">
+              <div class="jharokha-crest" aria-hidden="true"><svg viewBox="0 0 100 62"><use href="#sym-lotus"/></svg></div>
+              <h3 class="venue-name" data-bind="venue.name"></h3>
+              <p class="venue-name-ta" lang="ta" data-bind="venue.nameTamil"></p>
+              <div class="map-wrap">
+                <iframe id="venueMap" title="Venue map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+              </div>
+              <address class="venue-address">
+                <span data-bind="venue.address"></span>
+                <small data-bind="venue.landmark"></small>
+              </address>
+              <a class="btn btn--gold" id="directionsBtn" href="#" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+                Get Directions
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         9. RSVP
+         ============================================================ -->
+    <section class="section light" id="rsvp">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow" data-reveal="fade-up">Kindly respond</p>
+          <h2 class="section-title" data-reveal="clip">RSVP</h2>
+          <div class="divider" data-divider data-reveal="draw" data-parallax="0.05"></div>
+          <p class="section-sub" data-reveal="fade-up" id="rsvpDeadline"></p>
+        </header>
+
+        <form class="rsvp-card" id="rsvpForm" novalidate data-reveal="fade-up">
+          <div class="field">
+            <label for="rsvpName">Your name</label>
+            <input id="rsvpName" name="name" type="text" autocomplete="name" placeholder="e.g. Karthik &amp; family" required>
+            <small class="field-error" id="nameError"></small>
+          </div>
+
+          <fieldset class="field">
+            <legend>Will you attend?</legend>
+            <div class="choice-row">
+              <label class="choice"><input type="radio" name="attending" value="yes" checked><span>Joyfully accept</span></label>
+              <label class="choice"><input type="radio" name="attending" value="no"><span>Regretfully decline</span></label>
+            </div>
+          </fieldset>
+
+          <div class="field" id="guestsField">
+            <label for="rsvpGuests">Number of guests</label>
+            <div class="stepper">
+              <button type="button" data-step="-1" aria-label="Fewer guests">−</button>
+              <input id="rsvpGuests" name="guests" type="number" inputmode="numeric" min="1" value="1">
+              <button type="button" data-step="1" aria-label="More guests">+</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="rsvpMessage">Your blessings / message <span class="optional">(optional)</span></label>
+            <textarea id="rsvpMessage" name="message" rows="3" placeholder="Wishing you a lifetime of happiness…"></textarea>
+          </div>
+
+          <button class="btn btn--royal btn--block" type="submit">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.3-.8-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.3 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>
+            Send RSVP on WhatsApp
+          </button>
+
+          <div class="cal-wrap">
+            <button class="btn btn--ghost btn--block" type="button" id="calBtn" aria-expanded="false" aria-controls="calMenu">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7zm-2 7h14v11H5V9zm6 2v3H8v2h3v3h2v-3h3v-2h-3v-3h-2z"/></svg>
+              Add to Calendar
+            </button>
+            <div class="cal-menu" id="calMenu" hidden>
+              <a id="gcalLink" href="#" target="_blank" rel="noopener">Google Calendar <small>(Muhurtham)</small></a>
+              <button type="button" id="icsBtn">Apple / Outlook <small>(.ics · all events)</small></button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================================================
+       10. FOOTER
+       ============================================================ -->
+  <footer class="section dark footer" id="footer">
+    <canvas class="particles" data-stars="60" data-sparkles="12" data-petals="0" aria-hidden="true"></canvas>
+
+    <div class="lamps" aria-hidden="true">
+      <div class="lamp" style="--x:8%;  --len:40px;  --dur:4.2s; --delay:-1s"><span class="lamp-chain"></span><div class="lamp-body"><svg viewBox="0 0 60 80"><use href="#sym-lamp"/></svg><span class="lamp-glow"></span><span class="flame"></span></div></div>
+      <div class="lamp" style="--x:28%; --len:90px;  --dur:5s;   --delay:-2.5s"><span class="lamp-chain"></span><div class="lamp-body"><svg viewBox="0 0 60 80"><use href="#sym-lamp"/></svg><span class="lamp-glow"></span><span class="flame"></span></div></div>
+      <div class="lamp" style="--x:50%; --len:20px;  --dur:4.6s; --delay:-.4s"><span class="lamp-chain"></span><div class="lamp-body"><svg viewBox="0 0 60 80"><use href="#sym-lamp"/></svg><span class="lamp-glow"></span><span class="flame"></span></div></div>
+      <div class="lamp" style="--x:72%; --len:90px;  --dur:5.2s; --delay:-3s"><span class="lamp-chain"></span><div class="lamp-body"><svg viewBox="0 0 60 80"><use href="#sym-lamp"/></svg><span class="lamp-glow"></span><span class="flame"></span></div></div>
+      <div class="lamp" style="--x:92%; --len:40px;  --dur:4.4s; --delay:-1.8s"><span class="lamp-chain"></span><div class="lamp-body"><svg viewBox="0 0 60 80"><use href="#sym-lamp"/></svg><span class="lamp-glow"></span><span class="flame"></span></div></div>
+    </div>
+
+    <div class="container footer-content">
+      <p class="eyebrow" data-reveal="fade-up">With best compliments from</p>
+      <ul class="compliments" id="compliments" data-stagger="120"></ul>
+      <div class="divider" data-divider data-reveal="draw" data-parallax="0.05"></div>
+      <p class="thanks-ta" lang="ta" data-reveal="fade-up" data-bind="thankYou.ta"></p>
+      <p class="thanks-en" data-reveal="fade-up" data-bind="thankYou.en"></p>
+      <p class="footer-names" data-reveal="zoom"><span data-bind="bride.name"></span> &amp; <span data-bind="groom.name"></span></p>
+      <p class="hashtag" data-bind="hashtag"></p>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       FLOATING UI: music button, lightbox, toast
+       ============================================================ -->
+  <button class="music-btn" id="musicBtn" type="button" aria-label="Play music" aria-pressed="false" hidden>
+    <svg class="music-note" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3v10.6A4 4 0 1 0 11 17V7h6V3H9z"/></svg>
+    <span class="music-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+  </button>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden>
+    <button class="lb-btn lb-close" type="button" aria-label="Close">&times;</button>
+    <button class="lb-btn lb-prev" type="button" aria-label="Previous photo">&#8249;</button>
+    <figure class="lb-figure">
+      <img id="lbImg" alt="">
+      <figcaption id="lbCaption"></figcaption>
+    </figure>
+    <button class="lb-btn lb-next" type="button" aria-label="Next photo">&#8250;</button>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
